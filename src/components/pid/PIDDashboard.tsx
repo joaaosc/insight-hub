@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { TopBar } from "./TopBar";
-import { Sidebar } from "./Sidebar";
+
 import { MapView } from "./MapView";
 import { StarterModelsModal } from "./StarterModelsModal";
 import { LegendBar } from "./LegendBar";
