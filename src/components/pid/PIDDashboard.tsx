@@ -55,17 +55,13 @@ const SECTORS: Sector[] = [
 ];
 
 export function PIDDashboard() {
-  const [modalOpen, setModalOpen] = useState(true);
-  const [selectedSector, setSelectedSector] = useState<Sector | null>(null);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [, setSelectedSector] = useState<Sector | null>(null);
 
   return (
     <div className="relative h-screen w-screen overflow-hidden bg-background text-foreground">
       <MapView />
       <TopBar />
-      <Sidebar
-        selectedSector={selectedSector}
-        onOpenModels={() => setModalOpen(true)}
-      />
       <LegendBar />
       {modalOpen && (
         <StarterModelsModal

@@ -8,31 +8,26 @@ export function MapView() {
   useEffect(() => {
     if (!ref.current || mapRef.current) return;
     const map = L.map(ref.current, {
-      center: [-19.49, -42.54], // Vale do Aço, MG
-      zoom: 12,
+      center: [-14.5, -54],
+      zoom: 4,
       zoomControl: false,
       attributionControl: true,
+      worldCopyJump: true,
     });
-    L.tileLayer(
-      "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
-      {
-        attribution: "Tiles © Esri",
-        maxZoom: 19,
-      },
-    ).addTo(map);
-    L.control.zoom({ position: "topleft" }).addTo(map);
 
-    // Sample AOI rectangle
-    const bounds: L.LatLngBoundsLiteral = [
-      [-19.55, -42.62],
-      [-19.43, -42.46],
-    ];
-    L.rectangle(bounds, {
-      color: "#5eead4",
-      weight: 2,
-      fillOpacity: 0.05,
-      dashArray: "4 4",
-    }).addTo(map);
+    // Light basemap with country/state borders + city labels (Esri Light Gray + reference)
+    L.tileLayer(
+      "https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}",
+      { attribution: "Tiles © Esri", maxZoom: 16 },
+    ).addTo(map);
+
+    // Boundaries & places overlay (country, state, city labels)
+    L.tileLayer(
+      "https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}",
+      { maxZoom: 16, opacity: 0.95 },
+    ).addTo(map);
+
+    L.control.zoom({ position: "topleft" }).addTo(map);
 
     mapRef.current = map;
     return () => {
@@ -44,7 +39,6 @@ export function MapView() {
   return (
     <div className="absolute inset-0">
       <div ref={ref} className="h-full w-full" />
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-background/30 via-transparent to-background/40" />
     </div>
   );
 }
