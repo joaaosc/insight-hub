@@ -1,26 +1,33 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { PIDDashboard } from "@/components/pid/PIDDashboard";
 
 export const Route = createFileRoute("/")({
+  head: () => ({
+    meta: [
+      { title: "PID — Plataforma Interativa de Descarbonização" },
+      {
+        name: "description",
+        content:
+          "Visualize, modele e refine cenários de descarbonização da infraestrutura e indústrias brasileiras em um dashboard espacial interativo.",
+      },
+      { property: "og:title", content: "PID — Plataforma Interativa de Descarbonização" },
+      {
+        property: "og:description",
+        content: "Dashboard espacial para modelagem de cenários de descarbonização.",
+      },
+    ],
+    links: [
+      { rel: "preconnect", href: "https://fonts.googleapis.com" },
+      { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
+      {
+        rel: "stylesheet",
+        href: "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap",
+      },
+    ],
+  }),
   component: Index,
 });
 
-// IMPORTANT: Replace this placeholder. For sites with multiple pages (About, Services, Contact, etc.),
-// create separate route files (about.tsx, services.tsx, contact.tsx) — don't put all pages in this file.
-function PlaceholderIndex() {
-  return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
-    </div>
-  );
-}
-
 function Index() {
-  return <PlaceholderIndex />;
+  return <PIDDashboard />;
 }
