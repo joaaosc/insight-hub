@@ -20,11 +20,12 @@ export function MapView() {
         worldCopyJump: true,
       });
 
-      // Basemap — Esri World Terrain
+      // Basemap — Esri World Topo (cobre até zoom 19)
       L.tileLayer(
-        "https://services.arcgisonline.com/ArcGIS/rest/services/World_Terrain_Base/MapServer/tile/{z}/{y}/{x}",
-        { attribution: "Esri | TomTom | USGS | FAO | NOAA | IBGE", maxZoom: 13 },
+        "https://services.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}",
+        { attribution: "Esri | TomTom | USGS | FAO | NOAA | IBGE", maxZoom: 19 },
       ).addTo(map);
+      map.setMaxZoom(19);
 
       mapRef.current = map;
 
@@ -54,7 +55,7 @@ export function MapView() {
         if (muniLayer || muniLoading) return;
         muniLoading = true;
         fetch(
-          "https://servicodados.ibge.gov.br/api/v3/malhas/paises/BR?formato=application/vnd.geo+json&qualidade=baixa&intrarregiao=municipio",
+          "https://servicodados.ibge.gov.br/api/v3/malhas/paises/BR?formato=application/vnd.geo+json&qualidade=minima&intrarregiao=municipio",
         )
           .then((r) => r.json())
           .then((geo) => {
