@@ -8,26 +8,21 @@ export function MapView() {
   useEffect(() => {
     if (!ref.current || mapRef.current) return;
     const map = L.map(ref.current, {
-      center: [-14.5, -54],
+      center: [-15, -55],
       zoom: 4,
       zoomControl: false,
       attributionControl: true,
       worldCopyJump: true,
     });
 
-    // Light basemap with country/state borders + city labels (Esri Light Gray + reference)
+    // Esri World Terrain Base — light, hillshaded continents look like the original PID
     L.tileLayer(
-      "https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}",
-      { attribution: "Tiles © Esri", maxZoom: 16 },
+      "https://services.arcgisonline.com/ArcGIS/rest/services/World_Terrain_Base/MapServer/tile/{z}/{y}/{x}",
+      {
+        attribution: "Esri | TomTom | USGS | FAO | NOAA",
+        maxZoom: 13,
+      },
     ).addTo(map);
-
-    // Boundaries & places overlay (country, state, city labels)
-    L.tileLayer(
-      "https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}",
-      { maxZoom: 16, opacity: 0.95 },
-    ).addTo(map);
-
-    L.control.zoom({ position: "topleft" }).addTo(map);
 
     mapRef.current = map;
     return () => {
@@ -36,9 +31,5 @@ export function MapView() {
     };
   }, []);
 
-  return (
-    <div className="absolute inset-0">
-      <div ref={ref} className="h-full w-full" />
-    </div>
-  );
+  return <div ref={ref} className="absolute inset-0 h-full w-full" />;
 }
