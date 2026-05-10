@@ -1,32 +1,32 @@
 import { useEffect, useRef } from "react";
-import L from "leaflet";
 
 export function MapView() {
   const ref = useRef<HTMLDivElement>(null);
-  const mapRef = useRef<L.Map | null>(null);
+  const mapRef = useRef<unknown>(null);
 
   useEffect(() => {
     if (!ref.current || mapRef.current) return;
-    const map = L.map(ref.current, {
-      center: [-15, -55],
-      zoom: 4,
-      zoomControl: false,
-      attributionControl: true,
-      worldCopyJump: true,
-    });
-
-    // Esri World Terrain Base — light, hillshaded continents look like the original PID
-    L.tileLayer(
-      "https://services.arcgisonline.com/ArcGIS/rest/services/World_Terrain_Base/MapServer/tile/{z}/{y}/{x}",
-      {
-        attribution: "Esri | TomTom | USGS | FAO | NOAA",
-        maxZoom: 13,
-      },
-    ).addTo(map);
-
-    mapRef.current = map;
+    let cancelled = false;
+    (async () => {
+      const L = (await import("leaflet")).default;
+      if (cancelled || !ref.current) return;
+      const map = L.map(ref.current, {
+        center: [-15, -55],
+        zoom: 4,
+        zoomControl: false,
+        attributionControl: true,
+        worldCopyJump: true,
+      });
+      L.tileLayer(
+        "https://services.arcgisonline.com/ArcGIS/rest/services/World_Terrain_Base/MapServer/tile/{z}/{y}/{x}",
+        { attribution: "Esri | TomTom | USGS | FAO | NOAA", maxZoom: 13 },
+      ).addTo(map);
+      mapRef.current = map;
+    })();
     return () => {
-      map.remove();
+      cancelled = true;
+      const m = mapRef.current as { remove?: () => void } | null;
+      m?.remove?.();
       mapRef.current = null;
     };
   }, []);
